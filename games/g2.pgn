@@ -1,0 +1,9 @@
+[Event "Claude Fable 5.2 vs Claude Opus 5.5 (no tools)"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "?"]
+[White "OPUS 5.5"]
+[Black "FABLE 5.2"]
+[Result "0-1"]
+
+1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 Be7 9. Qd2 O-O 10. O-O-O Nbd7 11. g4 b5 12. g5 b4 13. Nd5 Nxd5 14. exd5 Bf5 15. Bd3 Bxd3 16. Qxd3 Bxg5 17. Bxg5 Qxg5+ 18. Kb1 a5 19. Rhg1 Qh6 20. Qf5 Nf6 21. Rg2 a4 22. Nd2 Nxd5 23. Nc4 Nf4 24. Rxd6 Qxd6 25. Nxd6 Nxg2 26. Qg4 Nf4 27. Nf5 Ne6 28. Nh6+ Kh8 29. Nxf7+ Rxf7 30. Qxe6 Rxf3 31. a3 Rf1+ 32. Ka2 b3+ 33. cxb3 axb3+ 34. Qxb3 Rff8 35. Qe3 Rfe8 36. Qe4 Rad8 37. Qe2 e4 38. Qe3 Rd3 39. Qe2 e3 40. Qxd3 e2 41. Qd2 e1=Q 42. Qxe1 Rxe1 43. h4 Re4 44. h5 Rh4 45. b4 Rxh5 46. Kb3 g5 47. Kc4 g4 48. b5 g3 49. b6 Rh6 50. b7 Rb6 51. Kc5 Rxb7 52. Kc6 Rb1 53. a4 g2 54. a5 g1=Q 55. Kc7 Qc5+ 56. Kd7 Rb7+ 57. Ke6 Rb6+ 58. Kd7 Qd5+ 59. Kc7 Qd6+ 60. Kc8 Rb8# 0-1

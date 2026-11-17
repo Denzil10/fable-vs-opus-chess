@@ -1,0 +1,233 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Claude Fable 5.2 vs Claude Opus 5.5: chess, no tools</title>
+<style>body{font:17px/1.5 system-ui,sans-serif;max-width:860px;margin:40px auto;padding:0 18px;background:#14161c;color:#e6e8ec}a{color:#7cc4ff}
+h1{font-size:30px}section{background:#1e2129;padding:18px 22px;margin:22px 0;border-radius:10px}.res{font-weight:700;color:#ffd84d}
+table{border-collapse:collapse;width:100%;font-size:14px}td{padding:3px 8px;border-bottom:1px solid #2c303a;vertical-align:top}tr.bad td{color:#ff6a5e}code{background:#2c303a;padding:1px 5px}</style></head><body>
+<h1>Claude Fable 5.2 vs Claude Opus 5.5: chess, no tools</h1>
+<p>Two games played on 2026-11-17, colours swapped. Each move is one fresh <code>claude -p --model &lt;model&gt; --tools ""</code> call (no tools, no code, no memory between moves). Every turn both models get the move list, the FEN and a text diagram of the board. Three illegal tries on one move would forfeit. A python-chess referee (<a href="match.py">match.py</a>) checked every move; <a href="analyze.py">analyze.py</a> had Stockfish (depth 18) grade every move afterwards. Result: <b>Fable 5.2 won both</b>. Two games is a small sample, not a rating.</p>
+<section><h2>Game 1: Fable 5.2 (White) vs Opus 5.5 (Black)</h2><p>Fable hung a rook on move 34 (Rb3, "defending the a-pawn"); Opus gave its queen back on move 38 (Qf4+, "check first").</p><p class="res">Result: 1-0 (checkmate on move 45) · illegal tries: Fable 5.2 0, Opus 5.5 2</p>
+<p><a href="https://denzil10.github.io/claude-chess-engine/index.html?pgn=1.%20e4%20e5%202.%20Nf3%20Nc6%203.%20Bb5%20a6%204.%20Ba4%20Nf6%205.%20O-O%20Be7%206.%20Re1%20b5%207.%20Bb3%20d6%208.%20c3%20O-O%209.%20h3%20Na5%2010.%20Bc2%20c5%2011.%20d4%20Qc7%2012.%20Nbd2%20cxd4%2013.%20cxd4%20Bd7%2014.%20Nf1%20Rac8%2015.%20Ne3%20Nc6%2016.%20d5%20Nb4%2017.%20Bb1%20a5%2018.%20a3%20Na6%2019.%20Bd2%20Nc5%2020.%20Qe2%20Qb6%2021.%20Bc2%20a4%2022.%20Nf1%20Nh5%2023.%20Nxe5%20dxe5%2024.%20Qxh5%20Nb3%2025.%20Bxb3%20axb3%2026.%20Qxe5%20Bf6%2027.%20Qf4%20Bxb2%2028.%20Rab1%20Bd4%2029.%20Be3%20Bxe3%2030.%20Rxe3%20Rc2%2031.%20Rexb3%20Qd4%2032.%20Ne3%20Rc3%2033.%20Rxc3%20Qxc3%2034.%20Rb3%20Qxb3%2035.%20Qc7%20Be8%2036.%20d6%20Qb1%2B%2037.%20Kh2%20Qxe4%2038.%20d7%20Qf4%2B%2039.%20Qxf4%20Bxd7%2040.%20Qd6%20Be6%2041.%20Qc5%20Rb8%2042.%20Qc7%20Ra8%2043.%20Qb7%20Rxa3%2044.%20Qb8%2B%20Bc8%2045.%20Qxc8%23">Replay on a board</a> · <a href="games/g1.pgn">PGN</a> · <a href="games/g1.jsonl">full log (every prompt and reply)</a> · <a href="games/g1.eval.json">Stockfish review</a></p>
+<p>White: average loss 47 centipawns a move, 1 blunders (≥300)</p>
+<p>Black: average loss 71 centipawns a move, 1 blunders (≥300)</p>
+<table><tr><td>#</td><td>model</td><td>move</td><td>secs</td><td>loss</td><td>what it said</td></tr>
+<tr><td>1.</td><td>Fable 5.2</td><td>e4</td><td>1.5</td><td>8</td><td>Claiming the center with the king&#x27;s pawn.</td></tr>
+<tr><td>1...</td><td>Opus 5.5</td><td>e5</td><td>4.8</td><td>1</td><td>Classical reply, fighting for the center immediately.</td></tr>
+<tr><td>2.</td><td>Fable 5.2</td><td>Nf3</td><td>1.4</td><td>12</td><td>Developing the knight and attacking the e5 pawn.</td></tr>
+<tr><td>2...</td><td>Opus 5.5</td><td>Nc6</td><td>2.8</td><td>3</td><td>Defending e5 with a natural developing knight move.</td></tr>
+<tr><td>3.</td><td>Fable 5.2</td><td>Bb5</td><td>1.5</td><td>3</td><td>Ruy Lopez, pressuring the knight that defends e5.</td></tr>
+<tr><td>3...</td><td>Opus 5.5</td><td>a6</td><td>4.2</td><td>21</td><td>Morphy Defense, challenging the bishop immediately.</td></tr>
+<tr><td>4.</td><td>Fable 5.2</td><td>Ba4</td><td>1.5</td><td>0</td><td>Retreating the bishop, keeping the Ruy Lopez tension.</td></tr>
+<tr><td>4...</td><td>Opus 5.5</td><td>Nf6</td><td>3.2</td><td>0</td><td>Main line Ruy Lopez, developing the knight and attacking e4.</td></tr>
+<tr><td>5.</td><td>Fable 5.2</td><td>O-O</td><td>1.5</td><td>5</td><td>Castling to safety, standard Ruy Lopez main line.</td></tr>
+<tr><td>5...</td><td>Opus 5.5</td><td>Be7</td><td>2.8</td><td>1</td><td>Closed Ruy Lopez, developing the bishop solidly.</td></tr>
+<tr><td>6.</td><td>Fable 5.2</td><td>Re1</td><td>1.5</td><td>5</td><td>Main line Ruy Lopez: defend e4 and support the center.</td></tr>
+<tr><td>6...</td><td>Opus 5.5</td><td>b5</td><td>4.6</td><td>2</td><td>Main line Closed Ruy Lopez, protecting e5 with tempo.</td></tr>
+<tr><td>7.</td><td>Fable 5.2</td><td>Bb3</td><td>1.5</td><td>0</td><td>Bishop retreats to b3, keeping the Ruy Lopez main line.</td></tr>
+<tr><td>7...</td><td>Opus 5.5</td><td>d6</td><td>4.3</td><td>0</td><td>Solid Closed Ruy Lopez main line, supporting e5.</td></tr>
+<tr><td>8.</td><td>Fable 5.2</td><td>c3</td><td>1.5</td><td>0</td><td>Main line Ruy Lopez: support d4 and give the bishop a retreat.</td></tr>
+<tr><td>8...</td><td>Opus 5.5</td><td>O-O</td><td>4.7</td><td>7</td><td>Black hasn&#x27;t castled yet; O-O is standard, with the king still on e8.</td></tr>
+<tr><td>9.</td><td>Fable 5.2</td><td>h3</td><td>1.6</td><td>3</td><td>Main line Ruy Lopez: stop the pin before playing d4.</td></tr>
+<tr><td>9...</td><td>Opus 5.5</td><td>Na5</td><td>3.8</td><td>14</td><td>Chigorin setup: knight to a5 hits the bishop.</td></tr>
+<tr><td>10.</td><td>Fable 5.2</td><td>Bc2</td><td>1.6</td><td>0</td><td>Preserve the bishop from the knight, keeping the Ruy Lopez structure.</td></tr>
+<tr><td>10...</td><td>Opus 5.5</td><td>c5</td><td>3.9</td><td>3</td><td>Chigorin-style pressure: c5 grabs space on the queenside.</td></tr>
+<tr><td>11.</td><td>Fable 5.2</td><td>d4</td><td>1.6</td><td>8</td><td>Main line Chigorin Ruy Lopez: claim the center.</td></tr>
+<tr><td>11...</td><td>Opus 5.5</td><td>Qc7</td><td>2.7</td><td>11</td><td>Classical Chigorin Ruy Lopez, reinforcing the center.</td></tr>
+<tr><td>12.</td><td>Fable 5.2</td><td>Nbd2</td><td>1.5</td><td>10</td><td>Classical Chigorin Ruy Lopez; developing the knight toward f1.</td></tr>
+<tr><td>12...</td><td>Opus 5.5</td><td>cxd4</td><td>4.7</td><td>0</td><td>Chigorin main line: trade on d4, then develop.</td></tr>
+<tr><td>13.</td><td>Fable 5.2</td><td>cxd4</td><td>2.0</td><td>1</td><td>Recapturing the pawn, keeping the classical Chigorin center.</td></tr>
+<tr><td>13...</td><td>Opus 5.5</td><td>Bd7</td><td>3.3</td><td>4</td><td>Chigorin main line, developing the bishop with tempo-free pressure.</td></tr>
+<tr><td>14.</td><td>Fable 5.2</td><td>Nf1</td><td>2.4</td><td>0</td><td>Standard Ruy Lopez knight reroute toward e3 and g3.</td></tr>
+<tr><td>14...</td><td>Opus 5.5</td><td>Rac8</td><td>5.3</td><td>0</td><td>Chigorin line: activate the rook on the c-file.</td></tr>
+<tr><td>15.</td><td>Fable 5.2</td><td>Ne3</td><td>4.6</td><td>0</td><td>Defending the c2 bishop while developing the knight toward d5.</td></tr>
+<tr><td>15...</td><td>Opus 5.5</td><td>Nc6</td><td>6.6</td><td>0</td><td>Rerouting the knight to pressure d4 and eye b4.</td></tr>
+<tr><td>16.</td><td>Fable 5.2</td><td>d5</td><td>5.3</td><td>0</td><td>Gaining space and kicking the knight off c6.</td></tr>
+<tr><td>16...</td><td>Opus 5.5</td><td>Nb4</td><td>6.4</td><td>2</td><td>Knight jumps to b4, hitting the c2 bishop twice.</td></tr>
+<tr><td>17.</td><td>Fable 5.2</td><td>Bb1</td><td>5.0</td><td>0</td><td>Retreating the bishop to keep it and prepare a3.</td></tr>
+<tr><td>17...</td><td>Opus 5.5</td><td>a5</td><td>6.8</td><td>0</td><td>Securing an escape route for the b4 knight via a6.</td></tr>
+<tr><td>18.</td><td>Fable 5.2</td><td>a3</td><td>7.7</td><td>0</td><td>Kicking the knight back before completing development.</td></tr>
+<tr><td>18...</td><td>Opus 5.5</td><td>Na6</td><td>6.0</td><td>0</td><td>The b4 knight is attacked, so it retreats to a6.</td></tr>
+<tr><td>19.</td><td>Fable 5.2</td><td>Bd2</td><td>6.2</td><td>89</td><td>Developing the bishop, eyeing the a5 pawn and connecting pieces.</td></tr>
+<tr><td>19...</td><td>Opus 5.5</td><td>Nc5</td><td>8.1</td><td>3</td><td>Rerouting the knight to the active c5 outpost.</td></tr>
+<tr><td>20.</td><td>Fable 5.2</td><td>Qe2</td><td>12.4</td><td>179</td><td>Defending e4 against the double knight attack.</td></tr>
+<tr><td>20...</td><td>Opus 5.5</td><td>Qb6</td><td>9.2</td><td>159</td><td>Queen defends a5 and eyes the b2 pawn.</td></tr>
+<tr><td>21.</td><td>Fable 5.2</td><td>Bc2</td><td>6.0</td><td>213</td><td>Bishop to c2 stops the knight landing on b3.</td></tr>
+<tr><td>21...</td><td>Opus 5.5</td><td>a4</td><td>8.5</td><td>272</td><td>Fixing the queenside and eyeing the b3 outpost for my knight.</td></tr>
+<tr><td>22.</td><td>Fable 5.2</td><td>Nf1</td><td>15.4</td><td>34</td><td>Regrouping the knight so the queen guards e4.</td></tr>
+<tr><td>22...</td><td>Opus 5.5</td><td>Nh5</td><td>7.7</td><td>143</td><td>Rerouting the knight toward f4 to pressure White&#x27;s kingside.</td></tr>
+<tr><td>23.</td><td>Fable 5.2</td><td>Nxe5</td><td>9.7</td><td>0</td><td>Knight on h5 is loose, so the e5 pawn falls.</td></tr>
+<tr><td>23...</td><td>Opus 5.5</td><td>dxe5</td><td>20.0</td><td>9</td><td>Recapturing the knight; White will win the h5 knight back.</td></tr>
+<tr><td>24.</td><td>Fable 5.2</td><td>Qxh5</td><td>4.8</td><td>11</td><td>Recapturing the piece on h5, eyeing e5 next.</td></tr>
+<tr><td>24...</td><td>Opus 5.5</td><td>Nb3</td><td>18.9</td><td>98</td><td>Trading knight for a bishop, eyeing the a1 rook.</td></tr>
+<tr><td>25.</td><td>Fable 5.2</td><td>Bxb3</td><td>9.2</td><td>21</td><td>Trading off the forking knight to keep my extra pawn.</td></tr>
+<tr class="bad"><td></td><td>Opus 5.5</td><td>Qxb3</td><td></td><td></td><td>ILLEGAL, try 1/3</td></tr>
+<tr><td>25...</td><td>Opus 5.5</td><td>axb3</td><td>6.6</td><td>25</td><td>Recapturing the bishop with the a-pawn.</td></tr>
+<tr><td>26.</td><td>Fable 5.2</td><td>Qxe5</td><td>8.5</td><td>8</td><td>Taking the loose e5 pawn with tempo on the bishop.</td></tr>
+<tr><td>26...</td><td>Opus 5.5</td><td>Bf6</td><td>17.4</td><td>0</td><td>Bf6 hits the queen and lines up on b2.</td></tr>
+<tr><td>27.</td><td>Fable 5.2</td><td>Qf4</td><td>9.6</td><td>0</td><td>Queen retreats, keeping e4 and f2 covered.</td></tr>
+<tr><td>27...</td><td>Opus 5.5</td><td>Bxb2</td><td>13.6</td><td>0</td><td>Grabbing the b2 pawn while attacking the a1 rook.</td></tr>
+<tr><td>28.</td><td>Fable 5.2</td><td>Rab1</td><td>10.7</td><td>4</td><td>Rook steps off the bishop&#x27;s diagonal and targets b3.</td></tr>
+<tr><td>28...</td><td>Opus 5.5</td><td>Bd4</td><td>11.0</td><td>200</td><td>Centralizing the bishop on d4, where my queen defends it and it eyes f2.</td></tr>
+<tr><td>29.</td><td>Fable 5.2</td><td>Be3</td><td>10.1</td><td>190</td><td>Trading off the strong bishop, then collecting b3.</td></tr>
+<tr><td>29...</td><td>Opus 5.5</td><td>Bxe3</td><td>11.2</td><td>188</td><td>Trading bishops keeps my passed b3-pawn strong.</td></tr>
+<tr><td>30.</td><td>Fable 5.2</td><td>Rxe3</td><td>11.9</td><td>61</td><td>Recapturing with the rook, eyeing the b3 pawn next.</td></tr>
+<tr><td>30...</td><td>Opus 5.5</td><td>Rc2</td><td>32.6</td><td>176</td><td>Rook to c2 eyes f2 and backs the queen.</td></tr>
+<tr><td>31.</td><td>Fable 5.2</td><td>Rexb3</td><td>8.4</td><td>0</td><td>Taking the dangerous b-pawn and unpinning the rook.</td></tr>
+<tr><td>31...</td><td>Opus 5.5</td><td>Qd4</td><td>13.1</td><td>0</td><td>Centralizing the queen to pressure f2 alongside the c2 rook.</td></tr>
+<tr><td>32.</td><td>Fable 5.2</td><td>Ne3</td><td>8.5</td><td>5</td><td>Knight activates with tempo on the rook, shielding f2.</td></tr>
+<tr><td>32...</td><td>Opus 5.5</td><td>Rc3</td><td>16.1</td><td>98</td><td>Offering a rook trade to escape the knight&#x27;s attack.</td></tr>
+<tr><td>33.</td><td>Fable 5.2</td><td>Rxc3</td><td>9.6</td><td>16</td><td>Trading rooks to simplify while three pawns up.</td></tr>
+<tr><td>33...</td><td>Opus 5.5</td><td>Qxc3</td><td>7.4</td><td>0</td><td>Recapturing the rook on c3 with my queen restores material.</td></tr>
+<tr class="bad"><td>34.</td><td>Fable 5.2</td><td>Rb3</td><td>7.1</td><td>1157</td><td>Defending the a-pawn while kicking the queen.</td></tr>
+<tr><td>34...</td><td>Opus 5.5</td><td>Qxb3</td><td>8.2</td><td>0</td><td>The rook on b3 is undefended, so I win it outright.</td></tr>
+<tr><td>35.</td><td>Fable 5.2</td><td>Qc7</td><td>7.4</td><td>0</td><td>Activating the queen to hit the bishop and support the d-pawn.</td></tr>
+<tr class="bad"><td></td><td>Opus 5.5</td><td>Ba4</td><td></td><td></td><td>ILLEGAL, try 1/3</td></tr>
+<tr><td>35...</td><td>Opus 5.5</td><td>Be8</td><td>15.4</td><td>112</td><td>The bishop on d7 is under attack, so I&#x27;m retreating it to safety.</td></tr>
+<tr><td>36.</td><td>Fable 5.2</td><td>d6</td><td>7.1</td><td>12</td><td>Pushing the passed pawn is my best practical chance.</td></tr>
+<tr><td>36...</td><td>Opus 5.5</td><td>Qb1+</td><td>18.7</td><td>0</td><td>Check first, then grab the e4 pawn and control the e-file.</td></tr>
+<tr><td>37.</td><td>Fable 5.2</td><td>Kh2</td><td>6.4</td><td>18</td><td>Stepping out of check while keeping the knight active.</td></tr>
+<tr><td>37...</td><td>Opus 5.5</td><td>Qxe4</td><td>11.5</td><td>13</td><td>Grabbing the e4 pawn safely; my queen centralizes.</td></tr>
+<tr><td>38.</td><td>Fable 5.2</td><td>d7</td><td>7.6</td><td>15</td><td>Cashing in the passed pawn to win back the bishop.</td></tr>
+<tr class="bad"><td>38...</td><td>Opus 5.5</td><td>Qf4+</td><td>16.8</td><td>1389</td><td>Check first to loosen White&#x27;s king, then capture the d7 pawn.</td></tr>
+<tr><td>39.</td><td>Fable 5.2</td><td>Qxf4</td><td>3.3</td><td>20</td><td>Trading into a winning material edge by taking the queen.</td></tr>
+<tr><td>39...</td><td>Opus 5.5</td><td>Bxd7</td><td>7.2</td><td>11</td><td>Capturing the dangerous d7 pawn before it promotes.</td></tr>
+<tr><td>40.</td><td>Fable 5.2</td><td>Qd6</td><td>6.2</td><td>0</td><td>Queen centralizes, hitting the bishop and eyeing the b5 pawn.</td></tr>
+<tr><td>40...</td><td>Opus 5.5</td><td>Be6</td><td>9.6</td><td>22</td><td>Retreat the bishop to e6, where the f7 pawn defends it.</td></tr>
+<tr><td>41.</td><td>Fable 5.2</td><td>Qc5</td><td>9.1</td><td>0</td><td>Queen targets the loose b5 pawn.</td></tr>
+<tr><td>41...</td><td>Opus 5.5</td><td>Rb8</td><td>8.6</td><td>18</td><td>My rook defends the b5 pawn from the white queen.</td></tr>
+<tr><td>42.</td><td>Fable 5.2</td><td>Qc7</td><td>9.2</td><td>0</td><td>Queen hits the rook, eyeing the back rank and b5.</td></tr>
+<tr><td>42...</td><td>Opus 5.5</td><td>Ra8</td><td>11.8</td><td>13</td><td>Rook escapes the attack and targets the a3 pawn.</td></tr>
+<tr><td>43.</td><td>Fable 5.2</td><td>Qb7</td><td>7.1</td><td>0</td><td>Queen hits rook and b5; back-rank mate threats protect a3.</td></tr>
+<tr><td>43...</td><td>Opus 5.5</td><td>Rxa3</td><td>11.5</td><td>99</td><td>Grabbing the loose a3 pawn while saving my rook.</td></tr>
+<tr><td>44.</td><td>Fable 5.2</td><td>Qb8+</td><td>8.2</td><td>0</td><td>Back rank is fatally weak; mate follows.</td></tr>
+<tr><td>44...</td><td>Opus 5.5</td><td>Bc8</td><td>5.7</td><td>0</td><td>Forced block; the bishop interposes on c8.</td></tr>
+<tr><td>45.</td><td>Fable 5.2</td><td>Qxc8#</td><td>6.1</td><td>0</td><td>Bishop hangs with check, and mate follows next move.</td></tr>
+</table></section>
+<section><h2>Game 2: Opus 5.5 (White) vs Fable 5.2 (Black)</h2><p>Fable promoted a pawn to a queen on move 41 and again on move 54, and mated on move 60.</p><p class="res">Result: 0-1 (checkmate on move 61) · illegal tries: Opus 5.5 1, Fable 5.2 0</p>
+<p><a href="https://denzil10.github.io/claude-chess-engine/index.html?pgn=1.%20e4%20c5%202.%20Nf3%20d6%203.%20d4%20cxd4%204.%20Nxd4%20Nf6%205.%20Nc3%20a6%206.%20Be3%20e5%207.%20Nb3%20Be6%208.%20f3%20Be7%209.%20Qd2%20O-O%2010.%20O-O-O%20Nbd7%2011.%20g4%20b5%2012.%20g5%20b4%2013.%20Nd5%20Nxd5%2014.%20exd5%20Bf5%2015.%20Bd3%20Bxd3%2016.%20Qxd3%20Bxg5%2017.%20Bxg5%20Qxg5%2B%2018.%20Kb1%20a5%2019.%20Rhg1%20Qh6%2020.%20Qf5%20Nf6%2021.%20Rg2%20a4%2022.%20Nd2%20Nxd5%2023.%20Nc4%20Nf4%2024.%20Rxd6%20Qxd6%2025.%20Nxd6%20Nxg2%2026.%20Qg4%20Nf4%2027.%20Nf5%20Ne6%2028.%20Nh6%2B%20Kh8%2029.%20Nxf7%2B%20Rxf7%2030.%20Qxe6%20Rxf3%2031.%20a3%20Rf1%2B%2032.%20Ka2%20b3%2B%2033.%20cxb3%20axb3%2B%2034.%20Qxb3%20Rff8%2035.%20Qe3%20Rfe8%2036.%20Qe4%20Rad8%2037.%20Qe2%20e4%2038.%20Qe3%20Rd3%2039.%20Qe2%20e3%2040.%20Qxd3%20e2%2041.%20Qd2%20e1%3DQ%2042.%20Qxe1%20Rxe1%2043.%20h4%20Re4%2044.%20h5%20Rh4%2045.%20b4%20Rxh5%2046.%20Kb3%20g5%2047.%20Kc4%20g4%2048.%20b5%20g3%2049.%20b6%20Rh6%2050.%20b7%20Rb6%2051.%20Kc5%20Rxb7%2052.%20Kc6%20Rb1%2053.%20a4%20g2%2054.%20a5%20g1%3DQ%2055.%20Kc7%20Qc5%2B%2056.%20Kd7%20Rb7%2B%2057.%20Ke6%20Rb6%2B%2058.%20Kd7%20Qd5%2B%2059.%20Kc7%20Qd6%2B%2060.%20Kc8%20Rb8%23">Replay on a board</a> · <a href="games/g2.pgn">PGN</a> · <a href="games/g2.jsonl">full log (every prompt and reply)</a> · <a href="games/g2.eval.json">Stockfish review</a></p>
+<p>White: average loss 49 centipawns a move, 4 blunders (≥300)</p>
+<p>Black: average loss 38 centipawns a move, 4 blunders (≥300)</p>
+<table><tr><td>#</td><td>model</td><td>move</td><td>secs</td><td>loss</td><td>what it said</td></tr>
+<tr><td>1.</td><td>Opus 5.5</td><td>e4</td><td>4.6</td><td>9</td><td>Classic king&#x27;s pawn opening, claiming the center.</td></tr>
+<tr><td>1...</td><td>Fable 5.2</td><td>c5</td><td>1.5</td><td>15</td><td>Sicilian Defense, fighting for the center asymmetrically.</td></tr>
+<tr><td>2.</td><td>Opus 5.5</td><td>Nf3</td><td>3.7</td><td>0</td><td>Open Sicilian: developing the knight toward d4.</td></tr>
+<tr><td>2...</td><td>Fable 5.2</td><td>d6</td><td>1.9</td><td>0</td><td>Solid Sicilian development, keeping Najdorf and Dragon options open.</td></tr>
+<tr><td>3.</td><td>Opus 5.5</td><td>d4</td><td>4.0</td><td>0</td><td>Open Sicilian, challenging the center immediately.</td></tr>
+<tr><td>3...</td><td>Fable 5.2</td><td>cxd4</td><td>1.6</td><td>1</td><td>Standard Sicilian: trade the c-pawn for White&#x27;s central d-pawn.</td></tr>
+<tr><td>4.</td><td>Opus 5.5</td><td>Nxd4</td><td>2.7</td><td>0</td><td>Recapturing centrally, standard Open Sicilian.</td></tr>
+<tr><td>4...</td><td>Fable 5.2</td><td>Nf6</td><td>2.0</td><td>0</td><td>Developing the knight and attacking e4, standard Open Sicilian.</td></tr>
+<tr><td>5.</td><td>Opus 5.5</td><td>Nc3</td><td>3.6</td><td>0</td><td>Main line Open Sicilian, defending e4 with the knight.</td></tr>
+<tr><td>5...</td><td>Fable 5.2</td><td>a6</td><td>1.5</td><td>0</td><td>Najdorf Sicilian: controlling b5 and preparing flexible queenside play.</td></tr>
+<tr><td>6.</td><td>Opus 5.5</td><td>Be3</td><td>3.1</td><td>0</td><td>English Attack against the Najdorf, aiming for aggressive kingside play.</td></tr>
+<tr><td>6...</td><td>Fable 5.2</td><td>e5</td><td>1.5</td><td>5</td><td>Classic Najdorf response, claiming the center and kicking the knight.</td></tr>
+<tr><td>7.</td><td>Opus 5.5</td><td>Nb3</td><td>3.1</td><td>6</td><td>Najdorf English Attack-style retreat, eyeing f3 and g4 plans.</td></tr>
+<tr><td>7...</td><td>Fable 5.2</td><td>Be6</td><td>1.5</td><td>4</td><td>Main line Najdorf development, eyeing d5 control.</td></tr>
+<tr><td>8.</td><td>Opus 5.5</td><td>f3</td><td>4.6</td><td>0</td><td>English Attack setup, preparing queenside castling and g4.</td></tr>
+<tr><td>8...</td><td>Fable 5.2</td><td>Be7</td><td>1.5</td><td>4</td><td>Main line English Attack: develop the bishop and prepare castling.</td></tr>
+<tr><td>9.</td><td>Opus 5.5</td><td>Qd2</td><td>4.5</td><td>3</td><td>English Attack setup: queen to d2, castling long next.</td></tr>
+<tr><td>9...</td><td>Fable 5.2</td><td>O-O</td><td>1.5</td><td>11</td><td>Castling into the main line of the English Attack.</td></tr>
+<tr><td>10.</td><td>Opus 5.5</td><td>O-O-O</td><td>4.9</td><td>7</td><td>English Attack Najdorf; castle long and push kingside pawns.</td></tr>
+<tr><td>10...</td><td>Fable 5.2</td><td>Nbd7</td><td>1.4</td><td>0</td><td>Standard Najdorf English Attack development, supporting b5 and d5 ideas.</td></tr>
+<tr><td>11.</td><td>Opus 5.5</td><td>g4</td><td>3.0</td><td>0</td><td>English Attack Najdorf; standard g4 kingside pawn storm.</td></tr>
+<tr><td>11...</td><td>Fable 5.2</td><td>b5</td><td>1.5</td><td>0</td><td>Standard English Attack counterplay: expand on the queenside.</td></tr>
+<tr><td>12.</td><td>Opus 5.5</td><td>g5</td><td>5.0</td><td>0</td><td>English Attack, standard: g5 kicks the knight. Position: g4 pawn, g5 attacks f6 knight. b5-b4 threat on c3 knight. Standard theory: 12. g5 b4 13. Ne2 Ne8 14. f4... Fine, play g5.</td></tr>
+<tr><td>12...</td><td>Fable 5.2</td><td>b4</td><td>3.2</td><td>22</td><td>Counterattacking the knight, following main-line English Attack theory.</td></tr>
+<tr><td>13.</td><td>Opus 5.5</td><td>Nd5</td><td>5.9</td><td>84</td><td>Thematic knight jump into d5, the standard theory here.</td></tr>
+<tr><td>13...</td><td>Fable 5.2</td><td>Nxd5</td><td>4.5</td><td>0</td><td>Trading the knights to relieve the pressure on f6.</td></tr>
+<tr><td>14.</td><td>Opus 5.5</td><td>exd5</td><td>3.3</td><td>0</td><td>Recapture in the center, keeping a grip on d5.</td></tr>
+<tr><td>14...</td><td>Fable 5.2</td><td>Bf5</td><td>3.5</td><td>2</td><td>Bishop retreats to an active diagonal, keeping queenside pressure.</td></tr>
+<tr><td>15.</td><td>Opus 5.5</td><td>Bd3</td><td>8.9</td><td>180</td><td>Trading off Black&#x27;s active light-squared bishop.</td></tr>
+<tr><td>15...</td><td>Fable 5.2</td><td>Bxd3</td><td>6.5</td><td>0</td><td>Trading bishops, then eyeing the loose g5 pawn.</td></tr>
+<tr><td>16.</td><td>Opus 5.5</td><td>Qxd3</td><td>5.8</td><td>42</td><td>Recapture the bishop with the queen, keeping pieces coordinated.</td></tr>
+<tr><td>16...</td><td>Fable 5.2</td><td>Bxg5</td><td>9.5</td><td>21</td><td>Grabbing the g5 pawn, and the queen recaptures with check.</td></tr>
+<tr><td>17.</td><td>Opus 5.5</td><td>Bxg5</td><td>7.1</td><td>4</td><td>Recapture first; trade the bishops, then use the open g-file.</td></tr>
+<tr><td>17...</td><td>Fable 5.2</td><td>Qxg5+</td><td>1.5</td><td>0</td><td>Recapturing the bishop with my queen, with check.</td></tr>
+<tr><td>18.</td><td>Opus 5.5</td><td>Kb1</td><td>6.1</td><td>0</td><td>Stepping out of check; the king is safer on b1.</td></tr>
+<tr><td>18...</td><td>Fable 5.2</td><td>a5</td><td>5.9</td><td>0</td><td>Advancing the queenside pawns to harass the knight.</td></tr>
+<tr><td>19.</td><td>Opus 5.5</td><td>Rhg1</td><td>7.0</td><td>20</td><td>Rook to g1 attacks the queen and starts pressure down the g-file.</td></tr>
+<tr><td>19...</td><td>Fable 5.2</td><td>Qh6</td><td>4.8</td><td>30</td><td>Queen steps away, guarding d6 and eyeing h2.</td></tr>
+<tr><td>20.</td><td>Opus 5.5</td><td>Qf5</td><td>13.4</td><td>70</td><td>Activating the queen to hit the d7 knight and g7.</td></tr>
+<tr><td>20...</td><td>Fable 5.2</td><td>Nf6</td><td>5.4</td><td>13</td><td>Knight retreats to safety, guarding the kingside and eyeing d5.</td></tr>
+<tr><td>21.</td><td>Opus 5.5</td><td>Rg2</td><td>12.3</td><td>75</td><td>Rook to g2 guards h2 and keeps pressure on the g-file.</td></tr>
+<tr><td>21...</td><td>Fable 5.2</td><td>a4</td><td>8.6</td><td>90</td><td>Kicking the knight and gaining queenside space.</td></tr>
+<tr><td>22.</td><td>Opus 5.5</td><td>Nd2</td><td>8.7</td><td>13</td><td>Knight escapes the a-pawn&#x27;s attack, heading for c4.</td></tr>
+<tr><td>22...</td><td>Fable 5.2</td><td>Nxd5</td><td>9.1</td><td>0</td><td>Grabbing the undefended d5 pawn, with Ne3 fork ideas.</td></tr>
+<tr><td>23.</td><td>Opus 5.5</td><td>Nc4</td><td>17.2</td><td>0</td><td>Knight to c4 covers e3 and pressures d6 and e5.</td></tr>
+<tr><td>23...</td><td>Fable 5.2</td><td>Nf4</td><td>11.0</td><td>161</td><td>Knight hops to safety, hitting the rook on g2.</td></tr>
+<tr><td>24.</td><td>Opus 5.5</td><td>Rxd6</td><td>25.2</td><td>15</td><td>Grabbing d6 with tempo on the queen.</td></tr>
+<tr class="bad"><td>24...</td><td>Fable 5.2</td><td>Qxd6</td><td>8.3</td><td>327</td><td>Trading queen for both rooks, keeping a material edge.</td></tr>
+<tr><td>25.</td><td>Opus 5.5</td><td>Nxd6</td><td>11.9</td><td>171</td><td>The knight on c4 can capture Black&#x27;s queen on d6.</td></tr>
+<tr><td>25...</td><td>Fable 5.2</td><td>Nxg2</td><td>5.5</td><td>0</td><td>Knight takes the rook, restoring material balance.</td></tr>
+<tr class="bad"><td>26.</td><td>Opus 5.5</td><td>Qg4</td><td>15.8</td><td>519</td><td>The queen attacks the stranded knight and eyes the kingside.</td></tr>
+<tr class="bad"><td>26...</td><td>Fable 5.2</td><td>Nf4</td><td>7.5</td><td>327</td><td>Knight retreats to a protected outpost, keeping the material edge.</td></tr>
+<tr><td>27.</td><td>Opus 5.5</td><td>Nf5</td><td>14.4</td><td>15</td><td>Nf5 threatens Qxg7 mate, with the knight covering g7.</td></tr>
+<tr><td>27...</td><td>Fable 5.2</td><td>Ne6</td><td>19.9</td><td>169</td><td>Knight covers g7, stopping the mate threat.</td></tr>
+<tr class="bad"><td>28.</td><td>Opus 5.5</td><td>Nh6+</td><td>16.1</td><td>493</td><td>Nh6+ is a strong check: gxh6 is illegal because the pawn shields Black&#x27;s king from my queen.</td></tr>
+<tr><td>28...</td><td>Fable 5.2</td><td>Kh8</td><td>5.1</td><td>0</td><td>Pawn is pinned, so the king steps aside.</td></tr>
+<tr><td>29.</td><td>Opus 5.5</td><td>Nxf7+</td><td>17.8</td><td>51</td><td>Nxf7+ forks the king, regaining material to fight back.</td></tr>
+<tr><td>29...</td><td>Fable 5.2</td><td>Rxf7</td><td>11.7</td><td>0</td><td>Capturing the knight, heading for two rooks against the queen.</td></tr>
+<tr><td>30.</td><td>Opus 5.5</td><td>Qxe6</td><td>8.9</td><td>43</td><td>The e6 knight is undefended, so the queen takes it for free.</td></tr>
+<tr><td>30...</td><td>Fable 5.2</td><td>Rxf3</td><td>9.9</td><td>34</td><td>Grab the pawn and threaten back-rank mate.</td></tr>
+<tr class="bad"><td>31.</td><td>Opus 5.5</td><td>a3</td><td>17.4</td><td>304</td><td>Making luft, since Black threatens back-rank mate with Rf1.</td></tr>
+<tr class="bad"><td>31...</td><td>Fable 5.2</td><td>Rf1+</td><td>16.3</td><td>526</td><td>Check first, then pry open the king with ...b3+.</td></tr>
+<tr><td>32.</td><td>Opus 5.5</td><td>Ka2</td><td>4.7</td><td>30</td><td>Forced king step out of check; queen remains active.</td></tr>
+<tr class="bad"><td>32...</td><td>Fable 5.2</td><td>b3+</td><td>17.3</td><td>399</td><td>Opening the king with a pawn break for my rooks.</td></tr>
+<tr><td>33.</td><td>Opus 5.5</td><td>cxb3</td><td>7.4</td><td>0</td><td>The pawn check leaves one legal reply: capture with the c-pawn.</td></tr>
+<tr><td>33...</td><td>Fable 5.2</td><td>axb3+</td><td>10.0</td><td>0</td><td>Open the king&#x27;s shelter and activate the rooks.</td></tr>
+<tr><td>34.</td><td>Opus 5.5</td><td>Qxb3</td><td>8.6</td><td>33</td><td>Capture the checking pawn with the queen, keeping things safe.</td></tr>
+<tr><td>34...</td><td>Fable 5.2</td><td>Rff8</td><td>13.6</td><td>10</td><td>Consolidating rooks on the back rank before pushing the e-pawn.</td></tr>
+<tr><td>35.</td><td>Opus 5.5</td><td>Qe3</td><td>10.2</td><td>18</td><td>Centralizing the queen to guard key squares and eye e5.</td></tr>
+<tr><td>35...</td><td>Fable 5.2</td><td>Rfe8</td><td>7.0</td><td>36</td><td>Defending the e-pawn while keeping the a-file rook active.</td></tr>
+<tr><td>36.</td><td>Opus 5.5</td><td>Qe4</td><td>9.6</td><td>0</td><td>Blockade the e-pawn and hit the a8 rook.</td></tr>
+<tr><td>36...</td><td>Fable 5.2</td><td>Rad8</td><td>5.7</td><td>7</td><td>Activating the rook on the open file while keeping e5 defended.</td></tr>
+<tr class="bad"><td>37.</td><td>Opus 5.5</td><td>Qe2</td><td>15.1</td><td>489</td><td>Guarding the second rank against rook infiltration.</td></tr>
+<tr><td>37...</td><td>Fable 5.2</td><td>e4</td><td>3.4</td><td>0</td><td>Pushing the passed pawn, supported by the rook behind it.</td></tr>
+<tr><td>38.</td><td>Opus 5.5</td><td>Qe3</td><td>9.8</td><td>120</td><td>Blockade the e-pawn and guard d2.</td></tr>
+<tr><td>38...</td><td>Fable 5.2</td><td>Rd3</td><td>9.1</td><td>0</td><td>Rook lift hits the queen and supports the passed e-pawn.</td></tr>
+<tr><td>39.</td><td>Opus 5.5</td><td>Qe2</td><td>10.9</td><td>0</td><td>Retreating the queen to blockade the e-pawn and guard the second rank.</td></tr>
+<tr><td>39...</td><td>Fable 5.2</td><td>e3</td><td>7.0</td><td>38</td><td>Advancing the passed pawn, supported by the rook.</td></tr>
+<tr class="bad"><td></td><td>Opus 5.5</td><td>Qb5</td><td></td><td></td><td>ILLEGAL, try 1/3</td></tr>
+<tr><td>40.</td><td>Opus 5.5</td><td>Qxd3</td><td>7.4</td><td>27</td><td>Free rook on d3; capturing it stops the e-pawn too.</td></tr>
+<tr><td>40...</td><td>Fable 5.2</td><td>e2</td><td>14.0</td><td>0</td><td>Pawn runs; the new queen will guard my rook.</td></tr>
+<tr><td>41.</td><td>Opus 5.5</td><td>Qd2</td><td>16.1</td><td>9</td><td>Blockading e1 is the only way to stop promotion.</td></tr>
+<tr><td>41...</td><td>Fable 5.2</td><td>e1=Q</td><td>4.7</td><td>0</td><td>Promoting to win the queen for a rook-up endgame.</td></tr>
+<tr><td>42.</td><td>Opus 5.5</td><td>Qxe1</td><td>7.5</td><td>0</td><td>Recapturing the new queen is forced.</td></tr>
+<tr><td>42...</td><td>Fable 5.2</td><td>Rxe1</td><td>1.7</td><td>12</td><td>Capturing the queen with my rook.</td></tr>
+<tr><td>43.</td><td>Opus 5.5</td><td>h4</td><td>6.2</td><td>13</td><td>Pushing the h-pawn before the rook can grab it.</td></tr>
+<tr><td>43...</td><td>Fable 5.2</td><td>Re4</td><td>2.3</td><td>0</td><td>Rook up; win the h-pawn first.</td></tr>
+<tr><td>44.</td><td>Opus 5.5</td><td>h5</td><td>6.2</td><td>18</td><td>Pushing the h-pawn out of the rook&#x27;s attack.</td></tr>
+<tr><td>44...</td><td>Fable 5.2</td><td>Rh4</td><td>2.2</td><td>0</td><td>Win the h-pawn with the rook, keeping everything safe.</td></tr>
+<tr><td>45.</td><td>Opus 5.5</td><td>b4</td><td>7.5</td><td>86</td><td>Lost position, but queenside pawns are my only practical chance.</td></tr>
+<tr><td>45...</td><td>Fable 5.2</td><td>Rxh5</td><td>3.0</td><td>0</td><td>Capturing the loose h-pawn, keeping the rook active.</td></tr>
+<tr><td>46.</td><td>Opus 5.5</td><td>Kb3</td><td>5.4</td><td>2</td><td>Lost position, but keeping my pawns protected for now.</td></tr>
+<tr><td>46...</td><td>Fable 5.2</td><td>g5</td><td>5.7</td><td>0</td><td>Rook up; pushing the passed g-pawn to promote quickly.</td></tr>
+<tr><td>47.</td><td>Opus 5.5</td><td>Kc4</td><td>5.4</td><td>0</td><td>Pushing queenside pawns; the rook versus two pawns is lost anyway.</td></tr>
+<tr><td>47...</td><td>Fable 5.2</td><td>g4</td><td>6.5</td><td>0</td><td>Passed g-pawn runs; rook cuts the king off.</td></tr>
+<tr><td>48.</td><td>Opus 5.5</td><td>b5</td><td>6.4</td><td>0</td><td>Pushing the b-pawn, hoping for counterplay.</td></tr>
+<tr><td>48...</td><td>Fable 5.2</td><td>g3</td><td>7.2</td><td>0</td><td>Pushing the g-pawn; it queens before White&#x27;s b-pawn matters.</td></tr>
+<tr><td>49.</td><td>Opus 5.5</td><td>b6</td><td>5.3</td><td>0</td><td>Pushing the passed pawn for counterplay.</td></tr>
+<tr><td>49...</td><td>Fable 5.2</td><td>Rh6</td><td>9.3</td><td>0</td><td>Rook swings back to stop the b-pawn first.</td></tr>
+<tr><td>50.</td><td>Opus 5.5</td><td>b7</td><td>6.2</td><td>0</td><td>Pushing the b-pawn, my only real chance against the g-pawn.</td></tr>
+<tr><td>50...</td><td>Fable 5.2</td><td>Rb6</td><td>3.6</td><td>0</td><td>Stopping the b-pawn first, then my g-pawn decides.</td></tr>
+<tr><td>51.</td><td>Opus 5.5</td><td>Kc5</td><td>10.3</td><td>0</td><td>Attacking the rook, hoping Black slips; the position is difficult.</td></tr>
+<tr><td>51...</td><td>Fable 5.2</td><td>Rxb7</td><td>4.3</td><td>0</td><td>Capturing the dangerous pawn; my g-pawn will decide the game.</td></tr>
+<tr><td>52.</td><td>Opus 5.5</td><td>Kc6</td><td>3.9</td><td>0</td><td>Attacking the rook; this position is lost, but I&#x27;ll keep fighting.</td></tr>
+<tr><td>52...</td><td>Fable 5.2</td><td>Rb1</td><td>5.2</td><td>0</td><td>Rook steps away safely, ready to escort the g-pawn home.</td></tr>
+<tr><td>53.</td><td>Opus 5.5</td><td>a4</td><td>3.6</td><td>0</td><td>Losing endgame; pushing the a-pawn hoping for counterplay.</td></tr>
+<tr><td>53...</td><td>Fable 5.2</td><td>g2</td><td>2.0</td><td>0</td><td>Pushing the g-pawn; it queens unstoppably.</td></tr>
+<tr><td>54.</td><td>Opus 5.5</td><td>a5</td><td>4.1</td><td>0</td><td>Lost position, but I&#x27;ll push the pawn and play on.</td></tr>
+<tr><td>54...</td><td>Fable 5.2</td><td>g1=Q</td><td>1.8</td><td>0</td><td>Promoting the pawn to a queen wins easily.</td></tr>
+<tr><td>55.</td><td>Opus 5.5</td><td>Kc7</td><td>6.7</td><td>0</td><td>Lost position, but keeping the king active and pushing for counterplay.</td></tr>
+<tr><td>55...</td><td>Fable 5.2</td><td>Qc5+</td><td>6.5</td><td>0</td><td>Queen check drives the king toward a mating net.</td></tr>
+<tr><td>56.</td><td>Opus 5.5</td><td>Kd7</td><td>5.8</td><td>0</td><td>Lost position, but I keep the king moving and play on.</td></tr>
+<tr><td>56...</td><td>Fable 5.2</td><td>Rb7+</td><td>11.9</td><td>0</td><td>Rook check drives the king into a mating net.</td></tr>
+<tr><td>57.</td><td>Opus 5.5</td><td>Ke6</td><td>11.7</td><td>0</td><td>Stepping toward the center to avoid quick mating nets.</td></tr>
+<tr><td>57...</td><td>Fable 5.2</td><td>Rb6+</td><td>15.0</td><td>0</td><td>Driving the king to the edge with checks.</td></tr>
+<tr><td>58.</td><td>Opus 5.5</td><td>Kd7</td><td>8.3</td><td>0</td><td>Forced king move; Kd7 keeps the king safer.</td></tr>
+<tr><td>58...</td><td>Fable 5.2</td><td>Qd5+</td><td>14.9</td><td>0</td><td>Queen check drives the king toward a mating net.</td></tr>
+<tr><td>59.</td><td>Opus 5.5</td><td>Kc7</td><td>10.8</td><td>0</td><td>Kc7 escapes the check and attacks the rook on b6.</td></tr>
+<tr><td>59...</td><td>Fable 5.2</td><td>Qd6+</td><td>7.0</td><td>0</td><td>Queen check forces the king back, mate next.</td></tr>
+<tr><td>60.</td><td>Opus 5.5</td><td>Kc8</td><td>8.7</td><td>0</td><td>Only legal move, stepping out of check.</td></tr>
+<tr><td>60...</td><td>Fable 5.2</td><td>Rb8#</td><td>3.8</td><td>0</td><td>Rook to b8, guarded by the queen, ends it.</td></tr>
+</table></section>
+<p>The engine board used for replays was built by Claude Code: <a href="https://denzil10.github.io/claude-chess-engine/">play it</a>.</p>
+</body></html>
